@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.aysa.automation'
+version = '1.0.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Appium Java Client
+    testImplementation 'io.appium:java-client:10.0.0'
+
+    // TestNG for test framework
+    testImplementation 'org.testng:testng:7.11.0'
+
+    // Selenium
+    testImplementation 'org.seleniumhq.selenium:selenium-java:4.27.0'
+    testImplementation 'org.seleniumhq.selenium:selenium-support:4.27.0'
+
+    // JSON parsing for test data
+    testImplementation 'com.google.code.gson:gson:2.10.1'
+
+    // Logging
+    testImplementation 'org.slf4j:slf4j-api:2.0.9'
+    testImplementation 'ch.qos.logback:logback-classic:1.4.14'
+}
+
+test {
+    useTestNG() {
+        suites 'src/test/resources/testng.xml'
+    }
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+
+    systemProperty 'config.file', System.getProperty('config.file', 'src/test/resources/config.properties')
+}

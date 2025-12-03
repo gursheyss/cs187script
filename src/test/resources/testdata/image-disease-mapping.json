@@ -1,0 +1,76 @@
+{
+  "testCases": [
+    {
+      "id": 1,
+      "imageName": "PLACEHOLDER_IMAGE_1.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_1",
+      "description": "Test case 1 - Update with actual image and disease"
+    },
+    {
+      "id": 2,
+      "imageName": "PLACEHOLDER_IMAGE_2.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_2",
+      "description": "Test case 2 - Update with actual image and disease"
+    },
+    {
+      "id": 3,
+      "imageName": "PLACEHOLDER_IMAGE_3.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_3",
+      "description": "Test case 3 - Update with actual image and disease"
+    },
+    {
+      "id": 4,
+      "imageName": "PLACEHOLDER_IMAGE_4.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_4",
+      "description": "Test case 4 - Update with actual image and disease"
+    },
+    {
+      "id": 5,
+      "imageName": "PLACEHOLDER_IMAGE_5.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_5",
+      "description": "Test case 5 - Update with actual image and disease"
+    },
+    {
+      "id": 6,
+      "imageName": "PLACEHOLDER_IMAGE_6.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_6",
+      "description": "Test case 6 - Update with actual image and disease"
+    },
+    {
+      "id": 7,
+      "imageName": "PLACEHOLDER_IMAGE_7.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_7",
+      "description": "Test case 7 - Update with actual image and disease"
+    },
+    {
+      "id": 8,
+      "imageName": "PLACEHOLDER_IMAGE_8.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_8",
+      "description": "Test case 8 - Update with actual image and disease"
+    },
+    {
+      "id": 9,
+      "imageName": "PLACEHOLDER_IMAGE_9.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_9",
+      "description": "Test case 9 - Update with actual image and disease"
+    },
+    {
+      "id": 10,
+      "imageName": "PLACEHOLDER_IMAGE_10.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_10",
+      "description": "Test case 10 - Update with actual image and disease"
+    },
+    {
+      "id": 11,
+      "imageName": "PLACEHOLDER_IMAGE_11.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_11",
+      "description": "Test case 11 - Update with actual image and disease"
+    },
+    {
+      "id": 12,
+      "imageName": "PLACEHOLDER_IMAGE_12.jpg",
+      "expectedDisease": "PLACEHOLDER_DISEASE_12",
+      "description": "Test case 12 - Update with actual image and disease"
+    }
+  ]
+}

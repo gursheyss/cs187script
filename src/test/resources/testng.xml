@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Aysa Disease Detection Test Suite" parallel="false" verbose="2">
+
+    <listeners>
+        <listener class-name="org.testng.reporters.XMLReporter"/>
+    </listeners>
+
+    <test name="Disease Detection Tests">
+        <classes>
+            <class name="com.aysa.automation.tests.DiseaseDetectionTest"/>
+        </classes>
+    </test>
+
+</suite>
