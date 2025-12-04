@@ -8,41 +8,39 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 /**
- * Page Object for the Android system gallery/photo picker.
+ * Page Object for the Aysa app's custom image picker.
  *
- * NOTE: Gallery UI varies by Android version and device manufacturer.
- * These locators target common patterns but may need adjustment.
+ * NOTE: This is NOT the system gallery - Aysa uses a custom image picker
+ * with its own UI elements.
  */
 public class GalleryPage extends BasePage {
 
-    // Common gallery image elements
-    @AndroidFindBy(id = "com.google.android.documentsui:id/icon_thumb")
+    // Aysa custom image picker - main image grid
+    @AndroidFindBy(id = "com.visualdx.aysa:id/image")
     private List<WebElement> galleryImages;
 
-    @AndroidFindBy(className = "android.widget.ImageView")
-    private List<WebElement> imageViews;
+    // Image recycler view container
+    @AndroidFindBy(id = "com.visualdx.aysa:id/image_recycler_view")
+    private WebElement imageRecyclerView;
 
-    // Google Photos specific
-    @AndroidFindBy(id = "com.google.android.apps.photos:id/grid_item")
-    private List<WebElement> googlePhotosImages;
+    // Album/folder selector spinner
+    @AndroidFindBy(id = "com.visualdx.aysa:id/gallery_spinner")
+    private WebElement albumSpinner;
 
-    // Samsung Gallery specific
-    @AndroidFindBy(id = "com.sec.android.gallery3d:id/thumbnail")
-    private List<WebElement> samsungGalleryImages;
+    // Navigation buttons
+    @AndroidFindBy(id = "com.visualdx.aysa:id/button_back")
+    private WebElement backButton;
 
-    // Generic file picker elements
+    @AndroidFindBy(id = "com.visualdx.aysa:id/button_cancel")
+    private WebElement cancelButton;
+
+    // Fallback: clickable images by class
     @AndroidFindBy(xpath = "//android.widget.ImageView[@clickable='true']")
     private List<WebElement> clickableImages;
 
-    // Search/Browse elements
-    @AndroidFindBy(id = "android:id/button1")
-    private WebElement confirmButton;
-
-    @AndroidFindBy(xpath = "//android.widget.TextView[contains(@text, 'Pictures')]")
-    private WebElement picturesFolder;
-
-    @AndroidFindBy(xpath = "//android.widget.TextView[contains(@text, 'Images')]")
-    private WebElement imagesFolder;
+    // Album selector text (shows current album like "Pictures")
+    @AndroidFindBy(xpath = "//android.widget.Spinner[@resource-id='com.visualdx.aysa:id/gallery_spinner']//android.widget.TextView")
+    private WebElement currentAlbumText;
 
     public GalleryPage(AndroidDriver driver) {
         super(driver);
@@ -57,9 +55,7 @@ public class GalleryPage extends BasePage {
         } catch (InterruptedException ignored) {
         }
 
-        return !galleryImages.isEmpty() ||
-                !googlePhotosImages.isEmpty() ||
-                !clickableImages.isEmpty();
+        return isDisplayed(imageRecyclerView) || !galleryImages.isEmpty();
     }
 
     public ImageUploadPage selectImageByName(String imageName) {
@@ -117,29 +113,54 @@ public class GalleryPage extends BasePage {
     private List<WebElement> getAvailableImages() {
         if (!galleryImages.isEmpty()) {
             return galleryImages;
-        } else if (!googlePhotosImages.isEmpty()) {
-            return googlePhotosImages;
-        } else if (!samsungGalleryImages.isEmpty()) {
-            return samsungGalleryImages;
         } else if (!clickableImages.isEmpty()) {
             return clickableImages;
         }
-        return imageViews;
+        return galleryImages;
     }
 
-    public void navigateToPicturesFolder() {
-        logger.info("Navigating to Pictures folder");
+    public void selectAlbum(String albumName) {
+        logger.info("Selecting album: {}", albumName);
 
-        if (isDisplayed(picturesFolder)) {
-            click(picturesFolder);
-        } else if (isDisplayed(imagesFolder)) {
-            click(imagesFolder);
+        if (isDisplayed(albumSpinner)) {
+            click(albumSpinner);
+            // Wait for dropdown to appear
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ignored) {
+            }
+            // Try to find and click the album
+            try {
+                WebElement albumOption = driver.findElement(
+                        AppiumBy.androidUIAutomator(
+                                String.format("new UiSelector().textContains(\"%s\")", albumName)
+                        )
+                );
+                click(albumOption);
+            } catch (Exception e) {
+                logger.warn("Could not find album: {}", albumName);
+            }
         }
+    }
 
-        // Wait for folder to load
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException ignored) {
+    public String getCurrentAlbum() {
+        if (isDisplayed(currentAlbumText)) {
+            return currentAlbumText.getText();
+        }
+        return "";
+    }
+
+    public void clickBack() {
+        logger.info("Clicking back button");
+        if (isDisplayed(backButton)) {
+            click(backButton);
+        }
+    }
+
+    public void clickCancel() {
+        logger.info("Clicking cancel button");
+        if (isDisplayed(cancelButton)) {
+            click(cancelButton);
         }
     }
 
@@ -152,5 +173,9 @@ public class GalleryPage extends BasePage {
         } catch (Exception e) {
             logger.debug("Scroll failed or not needed: {}", e.getMessage());
         }
+    }
+
+    public int getImageCount() {
+        return galleryImages.size();
     }
 }
