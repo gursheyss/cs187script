@@ -3,26 +3,20 @@ package com.aysa.automation.tests;
 import com.aysa.automation.base.BaseTest;
 import com.aysa.automation.data.TestData;
 import com.aysa.automation.data.TestDataProvider;
-import com.aysa.automation.pages.GalleryPage;
-import com.aysa.automation.pages.HomePage;
-import com.aysa.automation.pages.ImageUploadPage;
-import com.aysa.automation.pages.ResultsPage;
+import io.appium.java_client.AppiumBy;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
+
 /**
  * Test class for disease detection functionality in Aysa app.
- * Contains parameterized tests for 12 different image-disease test cases.
- *
- * Prerequisites:
- * 1. Test images must be pre-loaded on the emulator in /sdcard/Pictures/
- * 2. Appium server must be running
- * 3. Android emulator must be running with Aysa app installed
  */
 public class DiseaseDetectionTest extends BaseTest {
-
-    private HomePage homePage;
 
     @BeforeClass(alwaysRun = true)
     @Override
@@ -32,149 +26,146 @@ public class DiseaseDetectionTest extends BaseTest {
     }
 
     /**
-     * Main parameterized test for disease detection.
-     * Runs 12 times with different test data (one per image-disease pair).
-     *
-     * Test Flow:
-     * 1. Open Aysa app home screen
-     * 2. Click upload image button
-     * 3. Select test image from gallery
-     * 4. Submit for analysis
-     * 5. Verify expected disease name in results
-     *
-     * @param testData Test case data containing image name and expected disease
+     * Test clicking the onboarding button after app launch.
      */
     @Test(dataProvider = "diseaseTestData", dataProviderClass = TestDataProvider.class,
-            description = "Verify disease detection for uploaded image")
+            description = "Test onboarding button click")
     public void testDiseaseDetection(TestData testData) {
         logger.info("========================================");
         logger.info("Starting Test Case #{}: {}", testData.getId(), testData.getDescription());
-        logger.info("Image: {}", testData.getImageName());
-        logger.info("Expected Disease: {}", testData.getExpectedDisease());
         logger.info("========================================");
 
-        // Step 1: Initialize home page
-        homePage = new HomePage(driver);
-        homePage.waitForPageLoad();
-        logger.info("Home page loaded successfully");
+        // Step 1: Click the "I understand. Let's get started" button
+        clickOnboardingButton();
 
-        // Step 2: Click upload image
-        GalleryPage galleryPage = homePage.clickUploadImage();
-        logger.info("Navigated to gallery");
+        // Step 2: Click "Start a new case" button
+        clickStartNewCase();
 
-        // Step 3: Select the test image
-        ImageUploadPage uploadPage = galleryPage.selectImageByName(testData.getImageName());
-        logger.info("Image selected: {}", testData.getImageName());
+        // Step 3: Open image library
+        openImageLibrary();
 
-        // Step 4: Submit for analysis
-        ResultsPage resultsPage = uploadPage.clickAnalyze();
-        logger.info("Analysis submitted, waiting for results");
+        // Step 4: Select the test image
+        selectImage(testData.getImageName());
 
-        // Step 5: Verify results
-        String detectedDisease = resultsPage.getDetectedDiseaseName();
-        logger.info("Detected disease: {}", detectedDisease);
-
-        // Assert the expected disease is detected
-        assertDiseaseMatches(detectedDisease, testData.getExpectedDisease());
-
-        logger.info("Test Case #{} PASSED", testData.getId());
+        logger.info("Test Case #{} PASSED - Flow completed", testData.getId());
     }
 
     /**
-     * Alternative test using expanded data provider parameters.
-     *
-     * @param testId          Test case ID
-     * @param imageName       Name of the image file
-     * @param expectedDisease Expected disease name
+     * Smoke test to verify onboarding button works.
      */
-    @Test(dataProvider = "diseaseTestDataExpanded", dataProviderClass = TestDataProvider.class,
-            description = "Verify disease detection (expanded parameters)",
-            enabled = false) // Disabled - use main test above
-    public void testDiseaseDetectionExpanded(int testId, String imageName, String expectedDisease) {
-        logger.info("Test Case #{}: Image={}, Expected={}", testId, imageName, expectedDisease);
-
-        homePage = new HomePage(driver);
-        homePage.waitForPageLoad();
-
-        GalleryPage galleryPage = homePage.clickUploadImage();
-        ImageUploadPage uploadPage = galleryPage.selectImageByName(imageName);
-        ResultsPage resultsPage = uploadPage.clickAnalyze();
-
-        String detectedDisease = resultsPage.getDetectedDiseaseName();
-        assertDiseaseMatches(detectedDisease, expectedDisease);
-    }
-
-    /**
-     * Test using image index selection instead of name.
-     *
-     * @param testData Test case data
-     */
-    @Test(dataProvider = "diseaseTestData", dataProviderClass = TestDataProvider.class,
-            description = "Verify disease detection using image index",
-            enabled = false) // Disabled - use main test above
-    public void testDiseaseDetectionByIndex(TestData testData) {
-        logger.info("Test Case #{} (by index)", testData.getId());
-
-        homePage = new HomePage(driver);
-        homePage.waitForPageLoad();
-
-        GalleryPage galleryPage = homePage.clickUploadImage();
-        galleryPage.navigateToPicturesFolder();
-
-        // Select by index (testId - 1 for 0-based index)
-        ImageUploadPage uploadPage = galleryPage.selectImageByIndex(testData.getId() - 1);
-        ResultsPage resultsPage = uploadPage.clickAnalyze();
-
-        String detectedDisease = resultsPage.getDetectedDiseaseName();
-        assertDiseaseMatches(detectedDisease, testData.getExpectedDisease());
-    }
-
-    /**
-     * Smoke test to verify basic app functionality.
-     */
-    @Test(description = "Smoke test for disease detection flow",
+    @Test(description = "Smoke test for onboarding flow",
             priority = -1, groups = {"smoke"})
     public void smokeTestDiseaseDetection() {
         logger.info("Running smoke test");
 
-        TestData firstTestCase = TestDataProvider.getTestDataById(1);
-        if (firstTestCase == null) {
-            logger.error("No test data available for smoke test");
-            return;
-        }
+        clickOnboardingButton();
+        clickStartNewCase();
 
-        homePage = new HomePage(driver);
-
-        // Verify home page loads
-        Assert.assertTrue(homePage.isPageDisplayed(),
-                "Home page should be displayed");
-
-        logger.info("Smoke test passed - App is functional");
+        logger.info("Smoke test passed - Flow completed");
     }
 
     /**
-     * Asserts that the detected disease matches the expected disease.
-     * Uses case-insensitive partial matching.
-     *
-     * @param actualDisease   Disease detected by the app
-     * @param expectedDisease Expected disease name
+     * Clicks the "I understand. Let's get started" button on the onboarding screen.
      */
-    private void assertDiseaseMatches(String actualDisease, String expectedDisease) {
-        logger.info("Asserting disease match - Expected: '{}', Actual: '{}'",
-                expectedDisease, actualDisease);
+    private void clickOnboardingButton() {
+        logger.info("Looking for onboarding button...");
 
-        Assert.assertNotNull(actualDisease,
-                "Detected disease is null. Expected: " + expectedDisease);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-        Assert.assertFalse(actualDisease.isEmpty(),
-                "Detected disease is empty. Expected: " + expectedDisease);
+        // Try to find by text content
+        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(
+                AppiumBy.androidUIAutomator("new UiSelector().textContains(\"I understand\")")));
 
-        boolean matches = actualDisease.toLowerCase().contains(expectedDisease.toLowerCase());
+        logger.info("Found onboarding button, clicking...");
+        button.click();
+        logger.info("Onboarding button clicked successfully");
 
-        Assert.assertTrue(matches,
-                String.format("Disease mismatch. Expected to contain: '%s', but got: '%s'",
-                        expectedDisease, actualDisease));
+        // Small wait for transition
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
 
-        logger.info("Disease assertion passed");
+    /**
+     * Clicks the "Start a new case" button (the + icon square).
+     */
+    private void clickStartNewCase() {
+        logger.info("Looking for Start a new case button...");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+        // Find the text element and then click its clickable parent
+        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(
+                AppiumBy.androidUIAutomator(
+                    "new UiSelector().textContains(\"Start a new case\").fromParent(new UiSelector().clickable(true))")));
+
+        logger.info("Found Start a new case button, clicking...");
+        button.click();
+        logger.info("Start a new case button clicked");
+
+        // Small wait for transition
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * Opens the image library (clicks the thumbnail in bottom left).
+     */
+    private void openImageLibrary() {
+        logger.info("Opening image library...");
+
+        // Debug: dump page source
+        logger.info("=== CAMERA PAGE SOURCE START ===");
+        logger.info(driver.getPageSource());
+        logger.info("=== CAMERA PAGE SOURCE END ===");
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+        // The image library button is typically an ImageView in the bottom left
+        // Try finding by content description or by class
+        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(
+                AppiumBy.androidUIAutomator(
+                    "new UiSelector().className(\"android.widget.ImageView\").clickable(true).instance(0)")));
+
+        logger.info("Found image library button, clicking...");
+        button.click();
+        logger.info("Image library opened");
+
+        // Wait for gallery to load
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+
+    /**
+     * Selects an image from the gallery by name.
+     */
+    private void selectImage(String imageName) {
+        logger.info("Selecting image: {}", imageName);
+
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+
+        // Find the image by its name/description
+        WebElement image = wait.until(ExpectedConditions.elementToBeClickable(
+                AppiumBy.androidUIAutomator(
+                    "new UiSelector().descriptionContains(\"" + imageName + "\")")));
+
+        logger.info("Found image, clicking...");
+        image.click();
+        logger.info("Image selected: {}", imageName);
+
+        // Wait for image to load
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 }

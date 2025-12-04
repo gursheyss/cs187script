@@ -1,0 +1,15 @@
+# Gradle
+.gradle/
+build/
+
+# Test images (large files)
+extracted_images/
+test_images/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store

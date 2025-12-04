@@ -2,75 +2,75 @@
   "testCases": [
     {
       "id": 1,
-      "imageName": "PLACEHOLDER_IMAGE_1.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_1",
-      "description": "Test case 1 - Update with actual image and disease"
+      "imageName": "eczema_page47_img1.jpeg",
+      "expectedDisease": "eczema",
+      "description": "Eczema test case 1"
     },
     {
       "id": 2,
-      "imageName": "PLACEHOLDER_IMAGE_2.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_2",
-      "description": "Test case 2 - Update with actual image and disease"
+      "imageName": "eczema_page48_img1.jpeg",
+      "expectedDisease": "eczema",
+      "description": "Eczema test case 2"
     },
     {
       "id": 3,
-      "imageName": "PLACEHOLDER_IMAGE_3.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_3",
-      "description": "Test case 3 - Update with actual image and disease"
+      "imageName": "eczema_page50_img1.jpeg",
+      "expectedDisease": "eczema",
+      "description": "Eczema test case 3"
     },
     {
       "id": 4,
-      "imageName": "PLACEHOLDER_IMAGE_4.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_4",
-      "description": "Test case 4 - Update with actual image and disease"
+      "imageName": "melanoma_page38_img1.jpeg",
+      "expectedDisease": "melanoma",
+      "description": "Melanoma test case 1"
     },
     {
       "id": 5,
-      "imageName": "PLACEHOLDER_IMAGE_5.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_5",
-      "description": "Test case 5 - Update with actual image and disease"
+      "imageName": "melanoma_page40_img1.jpeg",
+      "expectedDisease": "melanoma",
+      "description": "Melanoma test case 2"
     },
     {
       "id": 6,
-      "imageName": "PLACEHOLDER_IMAGE_6.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_6",
-      "description": "Test case 6 - Update with actual image and disease"
+      "imageName": "melanoma_page42_img1.jpeg",
+      "expectedDisease": "melanoma",
+      "description": "Melanoma test case 3"
     },
     {
       "id": 7,
-      "imageName": "PLACEHOLDER_IMAGE_7.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_7",
-      "description": "Test case 7 - Update with actual image and disease"
+      "imageName": "psoriasis_page55_img1.png",
+      "expectedDisease": "psoriasis",
+      "description": "Psoriasis test case 1"
     },
     {
       "id": 8,
-      "imageName": "PLACEHOLDER_IMAGE_8.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_8",
-      "description": "Test case 8 - Update with actual image and disease"
+      "imageName": "psoriasis_page57_img1.jpeg",
+      "expectedDisease": "psoriasis",
+      "description": "Psoriasis test case 2"
     },
     {
       "id": 9,
-      "imageName": "PLACEHOLDER_IMAGE_9.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_9",
-      "description": "Test case 9 - Update with actual image and disease"
+      "imageName": "psoriasis_page58_img1.jpeg",
+      "expectedDisease": "psoriasis",
+      "description": "Psoriasis test case 3"
     },
     {
       "id": 10,
-      "imageName": "PLACEHOLDER_IMAGE_10.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_10",
-      "description": "Test case 10 - Update with actual image and disease"
+      "imageName": "fungal_infection_page61_img1.jpeg",
+      "expectedDisease": "fungal infection",
+      "description": "Fungal infection test case 1"
     },
     {
       "id": 11,
-      "imageName": "PLACEHOLDER_IMAGE_11.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_11",
-      "description": "Test case 11 - Update with actual image and disease"
+      "imageName": "fungal_infection_page62_img1.jpeg",
+      "expectedDisease": "fungal infection",
+      "description": "Fungal infection test case 2"
     },
     {
       "id": 12,
-      "imageName": "PLACEHOLDER_IMAGE_12.jpg",
-      "expectedDisease": "PLACEHOLDER_DISEASE_12",
-      "description": "Test case 12 - Update with actual image and disease"
+      "imageName": "fungal_infection_page63_img1.jpeg",
+      "expectedDisease": "fungal infection",
+      "description": "Fungal infection test case 3"
     }
   ]
 }

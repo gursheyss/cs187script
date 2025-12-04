@@ -29,7 +29,7 @@ public class CapabilitiesManager {
 
         // Additional capabilities for stability
         options.setAutoGrantPermissions(true);
-        options.setNoReset(false);
+        options.setNoReset(true);  // Keep app data between runs
         options.setFullReset(false);
 
         // Timeout capabilities
