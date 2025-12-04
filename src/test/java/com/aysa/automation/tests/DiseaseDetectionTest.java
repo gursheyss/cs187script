@@ -3,6 +3,7 @@ package com.aysa.automation.tests;
 import com.aysa.automation.base.BaseTest;
 import com.aysa.automation.data.TestData;
 import com.aysa.automation.data.TestDataProvider;
+import com.aysa.automation.data.TestData.ExpectedResultType;
 import com.aysa.automation.pages.QuestionnairePage;
 import com.aysa.automation.pages.ResultsPage;
 import io.appium.java_client.AppiumBy;
@@ -64,11 +65,11 @@ public class DiseaseDetectionTest extends BaseTest {
         );
 
         // Step 6: Verify results
-        logger.info("Checking results for expected disease: {}", testData.getExpectedDisease());
+        logger.info("Checking results for expected outcome type: {}", testData.getExpectedResultType());
         boolean foundExpectedDisease = resultsPage.containsDisease(testData.getExpectedDisease());
-
-        // Log all detected diseases
-        logger.info("All detected diseases: {}", resultsPage.getAllDetectedDiseases());
+        boolean hasQualityError = resultsPage.hasQualityError();
+        var detectedDiseases = resultsPage.getAllDetectedDiseases();
+        logger.info("All detected diseases: {}", detectedDiseases);
 
         // Click DONE to dismiss results
         resultsPage.clickDone();
@@ -78,8 +79,16 @@ public class DiseaseDetectionTest extends BaseTest {
         navigateBackToCases();
 
         // Assert at the end so we clean up first
-        Assert.assertTrue(foundExpectedDisease,
-            "Expected disease '" + testData.getExpectedDisease() + "' not found in results");
+        if (testData.getExpectedResultType() == ExpectedResultType.DISEASE) {
+            Assert.assertTrue(foundExpectedDisease,
+                    "Expected disease '" + testData.getExpectedDisease() + "' not found in results");
+        } else if (testData.getExpectedResultType() == ExpectedResultType.NONE) {
+            Assert.assertTrue(detectedDiseases.isEmpty(),
+                    "Expected no disease results, but found: " + detectedDiseases);
+        } else if (testData.getExpectedResultType() == ExpectedResultType.QUALITY_ERROR) {
+            Assert.assertTrue(hasQualityError || detectedDiseases.isEmpty(),
+                    "Expected a quality error message but found diseases: " + detectedDiseases);
+        }
 
         logger.info("Test Case #{} COMPLETED - {}", testData.getId(), testData.getDescription());
     }

@@ -25,7 +25,7 @@ cs187script/
 └── test-results.txt    → Output file with results
 ```
 
-"We're using Java with TestNG as our test framework, and Appium for mobile automation. The whole thing follows the Page Object Model pattern - which basically means we separate our UI interactions from our test logic."
+"We're using Java with TestNG as our test framework, and Appium for mobile automation. The whole thing follows the Page Object Model pattern - which basically means we separate our UI interactions from our test logic. The 48 scenarios from our PDF (lighting, skin tone, resolution, etc.) are explicitly mapped to the numbered images under `images/<disease>/`, so every automated run aligns with the documented cases."
 
 ---
 
@@ -119,20 +119,21 @@ selectImage(testData.getImageName());
 QuestionnairePage questionnairePage = new QuestionnairePage(driver);
 ResultsPage resultsPage = questionnairePage.completeQuestionnaire(...);
 
-// Step 6: Check the results
+// Step 6: Check the results based on expected outcome type
 boolean foundExpectedDisease = resultsPage.containsDisease(testData.getExpectedDisease());
+boolean hasQualityError = resultsPage.hasQualityError();
+var detectedDiseases = resultsPage.getAllDetectedDiseases();
+
+if (testData.getExpectedResultType() == ExpectedResultType.DISEASE) {
+    Assert.assertTrue(foundExpectedDisease, ...);
+} else if (testData.getExpectedResultType() == ExpectedResultType.NONE) {
+    Assert.assertTrue(detectedDiseases.isEmpty(), ...);
+} else if (testData.getExpectedResultType() == ExpectedResultType.QUALITY_ERROR) {
+    Assert.assertTrue(hasQualityError || detectedDiseases.isEmpty(), ...);
+}
 ```
 
-"After selecting the image, the app asks a bunch of questions - is it flaky, where on the body, how long have you had it, etc. We automated all of that. Then we check if the disease we expected actually shows up in the results."
-
-**Point to assertion:**
-
-```java
-Assert.assertTrue(foundExpectedDisease,
-    "Expected disease '" + testData.getExpectedDisease() + "' not found in results");
-```
-
-"This is what determines pass or fail. If the expected disease isn't in the results, the test fails."
+"After selecting the image, the app asks a bunch of questions - is it flaky, where on the body, how long have you had it, etc. We automated all of that. Then we assert differently per scenario: expect a disease, expect no diseases (clear skin), or expect a quality error for low-light/blurry cases."
 
 ---
 
@@ -212,6 +213,20 @@ public boolean containsDisease(String expectedDisease) {
 
 "Then we do a case-insensitive check to see if our expected disease is anywhere in that list. We use 'contains' instead of exact match because the app might say 'Atopic dermatitis' when we're looking for 'eczema' - same condition, different name."
 
+**Mention quality detection helper:**
+
+```java
+public boolean hasQualityError() {
+    String pageSource = driver.getPageSource().toLowerCase();
+    return pageSource.contains("quality error")
+        || pageSource.contains("image too dark")
+        || pageSource.contains("too blurry")
+        || pageSource.contains("unable to detect");
+}
+```
+
+"For cases expecting an image quality failure, we look for common error phrases so those tests pass when the app rightfully rejects a bad image."
+
 ---
 
 ## File 5: TestDataProvider.java (1.5 minutes)
@@ -223,29 +238,25 @@ public boolean containsDisease(String expectedDisease) {
 **Point to data provider:**
 
 ```java
-@DataProvider(name = "eczemaTestData")
-public static Object[][] getEczemaTestData() {
-    return getTestDataForFolder("eczema", ECZEMA_CONFIG, "Atopic dermatitis");
+@DataProvider(name = "diseaseTestData")
+public static Object[][] getDiseaseTestData() {
+    return toData(generateAllTestData());
 }
 ```
 
-"TestNG data providers let us run the same test multiple times with different inputs. For eczema, we have 12 images, so this generates 12 test cases automatically."
+"TestNG data providers let us run the same test multiple times with different inputs. We build the list explicitly from the PDF cases, mapping each scenario to the numbered image and tagging its expected result type."
 
 **Point to config:**
 
 ```java
-private static final TestConfig ECZEMA_CONFIG = new TestConfig(
-    "YES",              // flakyBumpy
-    "test",             // profile name
-    "Limited Area",     // body coverage
-    "arm-lower-right",  // body location
-    "Weeks to Months",  // duration
-    "Yes",              // itches
-    "No"                // fever
-);
+private static List<TestData> generateMelanomaCases() {
+    List<TestData> cases = new ArrayList<>();
+    cases.add(buildCase(... "Light skin tone, low lighting", MELANOMA_CONFIG, ExpectedResultType.DISEASE));
+    // ...
+}
 ```
 
-"Each disease type has its own config with appropriate questionnaire answers. Eczema is typically flaky, limited to one area, itchy - so that's what we tell the app."
+"Each disease type still has its own questionnaire config, but now every one of the 48 scenarios is enumerated with a description and an expected outcome (disease, none, or quality error) to stay aligned with the PDF."
 
 ---
 

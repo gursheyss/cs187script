@@ -11,6 +11,7 @@ public class TestData {
     private String imageName;        // 1.jpg through 12.jpg
     private String expectedDisease;
     private String description;
+    private ExpectedResultType expectedResultType = ExpectedResultType.DISEASE;
 
     // Questionnaire answers
     private String flakyBumpy;       // "YES" or "NO"
@@ -84,6 +85,14 @@ public class TestData {
         this.expectedDisease = expectedDisease;
     }
 
+    public ExpectedResultType getExpectedResultType() {
+        return expectedResultType;
+    }
+
+    public void setExpectedResultType(ExpectedResultType expectedResultType) {
+        this.expectedResultType = expectedResultType;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -152,5 +161,14 @@ public class TestData {
     public String toString() {
         return String.format("TestCase[id=%d, folder=%s, image=%s, disease=%s]",
                 id, folderName, imageName, expectedDisease);
+    }
+
+    /**
+     * Expected outcome type for a test case.
+     */
+    public enum ExpectedResultType {
+        DISEASE,
+        NONE,
+        QUALITY_ERROR
     }
 }

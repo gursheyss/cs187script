@@ -113,6 +113,18 @@ public class ResultsPage extends BasePage {
     }
 
     /**
+     * Detects if the results screen is showing an image quality error instead of diseases.
+     */
+    public boolean hasQualityError() {
+        String pageSource = driver.getPageSource().toLowerCase();
+        return pageSource.contains("quality error")
+                || pageSource.contains("image too dark")
+                || pageSource.contains("image to dark")
+                || pageSource.contains("too blurry")
+                || pageSource.contains("unable to detect");
+    }
+
+    /**
      * Clicks the DONE button to finish viewing results.
      */
     public void clickDone() {
