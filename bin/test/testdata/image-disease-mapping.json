@@ -1,0 +1,76 @@
+{
+  "testCases": [
+    {
+      "id": 1,
+      "imageName": "eczema_page47_img1.jpeg",
+      "expectedDisease": "eczema",
+      "description": "Eczema test case 1"
+    },
+    {
+      "id": 2,
+      "imageName": "eczema_page48_img1.jpeg",
+      "expectedDisease": "eczema",
+      "description": "Eczema test case 2"
+    },
+    {
+      "id": 3,
+      "imageName": "eczema_page50_img1.jpeg",
+      "expectedDisease": "eczema",
+      "description": "Eczema test case 3"
+    },
+    {
+      "id": 4,
+      "imageName": "melanoma_page38_img1.jpeg",
+      "expectedDisease": "melanoma",
+      "description": "Melanoma test case 1"
+    },
+    {
+      "id": 5,
+      "imageName": "melanoma_page40_img1.jpeg",
+      "expectedDisease": "melanoma",
+      "description": "Melanoma test case 2"
+    },
+    {
+      "id": 6,
+      "imageName": "melanoma_page42_img1.jpeg",
+      "expectedDisease": "melanoma",
+      "description": "Melanoma test case 3"
+    },
+    {
+      "id": 7,
+      "imageName": "psoriasis_page55_img1.png",
+      "expectedDisease": "psoriasis",
+      "description": "Psoriasis test case 1"
+    },
+    {
+      "id": 8,
+      "imageName": "psoriasis_page57_img1.jpeg",
+      "expectedDisease": "psoriasis",
+      "description": "Psoriasis test case 2"
+    },
+    {
+      "id": 9,
+      "imageName": "psoriasis_page58_img1.jpeg",
+      "expectedDisease": "psoriasis",
+      "description": "Psoriasis test case 3"
+    },
+    {
+      "id": 10,
+      "imageName": "fungal_infection_page61_img1.jpeg",
+      "expectedDisease": "fungal infection",
+      "description": "Fungal infection test case 1"
+    },
+    {
+      "id": 11,
+      "imageName": "fungal_infection_page62_img1.jpeg",
+      "expectedDisease": "fungal infection",
+      "description": "Fungal infection test case 2"
+    },
+    {
+      "id": 12,
+      "imageName": "fungal_infection_page63_img1.jpeg",
+      "expectedDisease": "fungal infection",
+      "description": "Fungal infection test case 3"
+    }
+  ]
+}

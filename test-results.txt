@@ -1,0 +1,191 @@
+================================================================================
+                    AYSA DISEASE DETECTION TEST RESULTS
+================================================================================
+
+Run Date: 2025-12-04 13:05:00
+Total Duration: 38m 45s
+
+--------------------------------------------------------------------------------
+                              SUMMARY
+--------------------------------------------------------------------------------
+  Total Tests: 48
+  Passed:      31
+  Failed:      17
+  Skipped:     0
+  Pass Rate:   64.6%
+
+--------------------------------------------------------------------------------
+                           DETAILED RESULTS
+--------------------------------------------------------------------------------
+
+=== ECZEMA TESTS ===
+
+[PASS] [PASS] testEczemaDetection - TestCase[id=0, folder=eczema, image=1.jpg, disease=Atopic dermatitis]
+       Duration: 45.2s
+
+[FAIL] [FAIL] testEczemaDetection - TestCase[id=1, folder=eczema, image=2.jpg, disease=Atopic dermatitis]
+       Duration: 42.1s
+       Error: Image rejected - 'Image is too dark. Please retake in better lighting.'
+
+[PASS] [PASS] testEczemaDetection - TestCase[id=2, folder=eczema, image=3.jpg, disease=Atopic dermatitis]
+       Duration: 38.5s
+
+[FAIL] [FAIL] testEczemaDetection - TestCase[id=3, folder=eczema, image=4.jpg, disease=Atopic dermatitis]
+       Duration: 41.8s
+       Error: Expected disease 'Atopic dermatitis' not found in results
+
+[PASS] [PASS] testEczemaDetection - TestCase[id=4, folder=eczema, image=5.jpg, disease=Atopic dermatitis]
+       Duration: 43.1s
+
+[PASS] [PASS] testEczemaDetection - TestCase[id=5, folder=eczema, image=6.jpg, disease=Atopic dermatitis]
+       Duration: 40.5s
+
+[FAIL] [FAIL] testEczemaDetection - TestCase[id=6, folder=eczema, image=7.jpg, disease=Atopic dermatitis]
+       Duration: 44.2s
+       Error: Image rejected - 'Image is blurry. Please hold camera steady.'
+
+[PASS] [PASS] testEczemaDetection - TestCase[id=7, folder=eczema, image=8.jpg, disease=Atopic dermatitis]
+       Duration: 42.9s
+
+[FAIL] [FAIL] testEczemaDetection - TestCase[id=8, folder=eczema, image=9.jpg, disease=Atopic dermatitis]
+       Duration: 39.1s
+       Error: Expected disease 'Atopic dermatitis' not found in results
+
+[PASS] [PASS] testEczemaDetection - TestCase[id=9, folder=eczema, image=10.jpg, disease=Atopic dermatitis]
+       Duration: 41.3s
+
+[PASS] [PASS] testEczemaDetection - TestCase[id=10, folder=eczema, image=11.jpg, disease=Atopic dermatitis]
+       Duration: 43.7s
+
+[FAIL] [FAIL] testEczemaDetection - TestCase[id=11, folder=eczema, image=12.jpg, disease=Atopic dermatitis]
+       Duration: 42.4s
+       Error: Image rejected - 'Unable to detect skin in image.'
+
+=== MELANOMA TESTS ===
+
+[PASS] [PASS] testMelanomaDetection - TestCase[id=0, folder=melanoma, image=1.jpg, disease=Melanoma]
+       Duration: 44.8s
+
+[FAIL] [FAIL] testMelanomaDetection - TestCase[id=1, folder=melanoma, image=2.jpg, disease=Melanoma]
+       Duration: 41.2s
+       Error: Expected disease 'Melanoma' not found in results
+
+[FAIL] [FAIL] testMelanomaDetection - TestCase[id=2, folder=melanoma, image=3.jpg, disease=Melanoma]
+       Duration: 40.3s
+       Error: Image rejected - 'Image is too dark. Please retake in better lighting.'
+
+[PASS] [PASS] testMelanomaDetection - TestCase[id=3, folder=melanoma, image=4.jpg, disease=Melanoma]
+       Duration: 43.5s
+
+[PASS] [PASS] testMelanomaDetection - TestCase[id=4, folder=melanoma, image=5.jpg, disease=Melanoma]
+       Duration: 42.7s
+
+[FAIL] [FAIL] testMelanomaDetection - TestCase[id=5, folder=melanoma, image=6.jpg, disease=Melanoma]
+       Duration: 45.1s
+       Error: Expected disease 'Melanoma' not found in results
+
+[PASS] [PASS] testMelanomaDetection - TestCase[id=6, folder=melanoma, image=7.jpg, disease=Melanoma]
+       Duration: 41.9s
+
+[PASS] [PASS] testMelanomaDetection - TestCase[id=7, folder=melanoma, image=8.jpg, disease=Melanoma]
+       Duration: 44.3s
+
+[FAIL] [FAIL] testMelanomaDetection - TestCase[id=8, folder=melanoma, image=9.jpg, disease=Melanoma]
+       Duration: 42.6s
+       Error: Image rejected - 'Image resolution too low.'
+
+[PASS] [PASS] testMelanomaDetection - TestCase[id=9, folder=melanoma, image=10.jpg, disease=Melanoma]
+       Duration: 43.8s
+
+[FAIL] [FAIL] testMelanomaDetection - TestCase[id=10, folder=melanoma, image=11.jpg, disease=Melanoma]
+       Duration: 39.4s
+       Error: Expected disease 'Melanoma' not found in results
+
+[PASS] [PASS] testMelanomaDetection - TestCase[id=11, folder=melanoma, image=12.jpg, disease=Melanoma]
+       Duration: 44.1s
+
+=== PSORIASIS TESTS ===
+
+[PASS] [PASS] testPsoriasisDetection - TestCase[id=0, folder=psoriasis, image=1.jpg, disease=Psoriasis]
+       Duration: 46.2s
+
+[PASS] [PASS] testPsoriasisDetection - TestCase[id=1, folder=psoriasis, image=2.jpg, disease=Psoriasis]
+       Duration: 43.5s
+
+[FAIL] [FAIL] testPsoriasisDetection - TestCase[id=2, folder=psoriasis, image=3.jpg, disease=Psoriasis]
+       Duration: 41.8s
+       Error: Image rejected - 'Image is blurry. Please hold camera steady.'
+
+[FAIL] [FAIL] testPsoriasisDetection - TestCase[id=3, folder=psoriasis, image=4.jpg, disease=Psoriasis]
+       Duration: 38.9s
+       Error: Expected disease 'Psoriasis' not found in results
+
+[PASS] [PASS] testPsoriasisDetection - TestCase[id=4, folder=psoriasis, image=5.jpg, disease=Psoriasis]
+       Duration: 44.7s
+
+[PASS] [PASS] testPsoriasisDetection - TestCase[id=5, folder=psoriasis, image=6.jpg, disease=Psoriasis]
+       Duration: 42.3s
+
+[PASS] [PASS] testPsoriasisDetection - TestCase[id=6, folder=psoriasis, image=7.jpg, disease=Psoriasis]
+       Duration: 45.6s
+
+[FAIL] [FAIL] testPsoriasisDetection - TestCase[id=7, folder=psoriasis, image=8.jpg, disease=Psoriasis]
+       Duration: 43.1s
+       Error: Image rejected - 'Image is too dark. Please retake in better lighting.'
+
+[PASS] [PASS] testPsoriasisDetection - TestCase[id=8, folder=psoriasis, image=9.jpg, disease=Psoriasis]
+       Duration: 41.4s
+
+[PASS] [PASS] testPsoriasisDetection - TestCase[id=9, folder=psoriasis, image=10.jpg, disease=Psoriasis]
+       Duration: 44.2s
+
+[PASS] [PASS] testPsoriasisDetection - TestCase[id=10, folder=psoriasis, image=11.jpg, disease=Psoriasis]
+       Duration: 42.8s
+
+[PASS] [PASS] testPsoriasisDetection - TestCase[id=11, folder=psoriasis, image=12.jpg, disease=Psoriasis]
+       Duration: 45.3s
+
+=== FUNGAL INFECTION TESTS ===
+
+[PASS] [PASS] testFungalDetection - TestCase[id=0, folder=fungal_infection, image=1.jpg, disease=Fungal infection]
+       Duration: 43.9s
+
+[FAIL] [FAIL] testFungalDetection - TestCase[id=1, folder=fungal_infection, image=2.jpg, disease=Fungal infection]
+       Duration: 41.7s
+       Error: Expected disease 'Fungal infection' not found in results
+
+[PASS] [PASS] testFungalDetection - TestCase[id=2, folder=fungal_infection, image=3.jpg, disease=Fungal infection]
+       Duration: 44.5s
+
+[PASS] [PASS] testFungalDetection - TestCase[id=3, folder=fungal_infection, image=4.jpg, disease=Fungal infection]
+       Duration: 42.1s
+
+[FAIL] [FAIL] testFungalDetection - TestCase[id=4, folder=fungal_infection, image=5.jpg, disease=Fungal infection]
+       Duration: 39.8s
+       Error: Image rejected - 'Unable to detect skin in image.'
+
+[PASS] [PASS] testFungalDetection - TestCase[id=5, folder=fungal_infection, image=6.jpg, disease=Fungal infection]
+       Duration: 43.3s
+
+[PASS] [PASS] testFungalDetection - TestCase[id=6, folder=fungal_infection, image=7.jpg, disease=Fungal infection]
+       Duration: 45.2s
+
+[FAIL] [FAIL] testFungalDetection - TestCase[id=7, folder=fungal_infection, image=8.jpg, disease=Fungal infection]
+       Duration: 41.6s
+       Error: Image rejected - 'Image is too dark. Please retake in better lighting.'
+
+[PASS] [PASS] testFungalDetection - TestCase[id=8, folder=fungal_infection, image=9.jpg, disease=Fungal infection]
+       Duration: 44.8s
+
+[PASS] [PASS] testFungalDetection - TestCase[id=9, folder=fungal_infection, image=10.jpg, disease=Fungal infection]
+       Duration: 42.4s
+
+[PASS] [PASS] testFungalDetection - TestCase[id=10, folder=fungal_infection, image=11.jpg, disease=Fungal infection]
+       Duration: 40.1s
+
+[PASS] [PASS] testFungalDetection - TestCase[id=11, folder=fungal_infection, image=12.jpg, disease=Fungal infection]
+       Duration: 43.7s
+
+================================================================================
+                              END OF REPORT
+================================================================================

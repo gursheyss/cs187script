@@ -2,56 +2,19 @@ package com.aysa.automation.pages;
 
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Page Object for the disease detection results screen.
- *
- * NOTE: Element locators are placeholders - update based on actual app.
+ * Results are displayed as cards with content-desc containing the disease name.
  */
 public class ResultsPage extends BasePage {
-
-    // PLACEHOLDER: Update these locators based on actual app elements
-    @AndroidFindBy(id = "com.visualdx.aysa:id/disease_name")
-    private WebElement primaryDiseaseName;
-
-    @AndroidFindBy(id = "com.visualdx.aysa:id/disease_title")
-    private WebElement diseaseTitle;
-
-    @AndroidFindBy(id = "com.visualdx.aysa:id/result_text")
-    private WebElement resultText;
-
-    @AndroidFindBy(id = "com.visualdx.aysa:id/diagnosis_result")
-    private WebElement diagnosisResult;
-
-    // List of all detected diseases (if multiple results shown)
-    @AndroidFindBy(id = "com.visualdx.aysa:id/disease_item_name")
-    private List<WebElement> diseaseListItems;
-
-    // Confidence/probability elements
-    @AndroidFindBy(id = "com.visualdx.aysa:id/confidence_value")
-    private WebElement confidenceValue;
-
-    // Navigation buttons
-    @AndroidFindBy(id = "com.visualdx.aysa:id/btn_new_scan")
-    private WebElement newScanButton;
-
-    @AndroidFindBy(id = "com.visualdx.aysa:id/btn_details")
-    private WebElement detailsButton;
-
-    @AndroidFindBy(id = "com.visualdx.aysa:id/btn_back")
-    private WebElement backButton;
-
-    // Alternative locators using XPath
-    @AndroidFindBy(xpath = "//android.widget.TextView[contains(@resource-id, 'disease')]")
-    private WebElement diseaseTextByPartialId;
-
-    @AndroidFindBy(xpath = "//android.widget.TextView[contains(@resource-id, 'result')]")
-    private WebElement resultTextByPartialId;
 
     public ResultsPage(AndroidDriver driver) {
         super(driver);
@@ -61,127 +24,129 @@ public class ResultsPage extends BasePage {
 
     @Override
     public boolean isPageDisplayed() {
-        return isDisplayed(primaryDiseaseName) ||
-                isDisplayed(diseaseTitle) ||
-                isDisplayed(resultText) ||
-                isDisplayed(diagnosisResult);
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+            wait.until(ExpectedConditions.presenceOfElementLocated(
+                AppiumBy.xpath("//android.widget.TextView[@text='Results']")
+            ));
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private void waitForResultsToLoad() {
         logger.info("Waiting for results page to load");
         try {
-            Thread.sleep(2000); // Initial wait for page transition
-            waitUtils.waitForElementToBeVisible(primaryDiseaseName);
+            Thread.sleep(3000); // Wait for API response and page render
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+            wait.until(ExpectedConditions.presenceOfElementLocated(
+                AppiumBy.id("com.visualdx.aysa:id/recycler_view")
+            ));
         } catch (Exception e) {
-            logger.debug("Primary disease element not found, checking alternatives");
+            logger.warn("Results may not have loaded completely: {}", e.getMessage());
         }
     }
 
-    public String getDetectedDiseaseName() {
-        logger.info("Getting detected disease name");
+    /**
+     * Gets all disease names from the results.
+     * Each result card has content-desc with the disease name.
+     */
+    public List<String> getAllDetectedDiseases() {
+        logger.info("Getting all detected diseases from results");
+        List<String> diseases = new ArrayList<>();
 
-        String diseaseName = null;
+        try {
+            // Find all result cards by their title_text resource-id
+            List<WebElement> titleElements = driver.findElements(
+                AppiumBy.id("com.visualdx.aysa:id/title_text")
+            );
 
-        // Try multiple locator strategies
-        if (isDisplayed(primaryDiseaseName)) {
-            diseaseName = getText(primaryDiseaseName);
-        } else if (isDisplayed(diseaseTitle)) {
-            diseaseName = getText(diseaseTitle);
-        } else if (isDisplayed(resultText)) {
-            diseaseName = getText(resultText);
-        } else if (isDisplayed(diagnosisResult)) {
-            diseaseName = getText(diagnosisResult);
-        } else if (isDisplayed(diseaseTextByPartialId)) {
-            diseaseName = getText(diseaseTextByPartialId);
+            for (WebElement title : titleElements) {
+                String text = title.getText();
+                if (text != null && !text.isEmpty()) {
+                    diseases.add(text);
+                    logger.info("Found disease result: {}", text);
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error getting diseases: {}", e.getMessage());
         }
 
-        if (diseaseName == null || diseaseName.isEmpty()) {
-            // Last resort: search entire page for disease name patterns
-            diseaseName = searchPageForDiseaseName();
-        }
-
-        logger.info("Detected disease: {}", diseaseName);
-        return diseaseName;
+        return diseases;
     }
 
+    /**
+     * Checks if the results contain the expected disease.
+     * @param expectedDisease The disease to look for (case-insensitive partial match)
+     * @return true if found in results
+     */
     public boolean containsDisease(String expectedDisease) {
-        logger.info("Checking if results contain disease: {}", expectedDisease);
+        logger.info("Checking if results contain: {}", expectedDisease);
 
-        String detectedDisease = getDetectedDiseaseName();
-        if (detectedDisease != null &&
-                detectedDisease.toLowerCase().contains(expectedDisease.toLowerCase())) {
-            return true;
-        }
+        List<String> diseases = getAllDetectedDiseases();
 
-        // Also check the list of diseases if multiple results
-        for (WebElement diseaseItem : diseaseListItems) {
-            String itemText = getText(diseaseItem);
-            if (itemText != null &&
-                    itemText.toLowerCase().contains(expectedDisease.toLowerCase())) {
+        for (String disease : diseases) {
+            if (disease.toLowerCase().contains(expectedDisease.toLowerCase())) {
+                logger.info("MATCH FOUND: {} contains {}", disease, expectedDisease);
                 return true;
             }
         }
 
-        // Search entire page source as fallback
+        // Also check page source as fallback
         String pageSource = driver.getPageSource();
-        return pageSource.toLowerCase().contains(expectedDisease.toLowerCase());
-    }
-
-    public List<String> getAllDetectedDiseases() {
-        logger.info("Getting all detected diseases");
-        return diseaseListItems.stream()
-                .map(this::getText)
-                .filter(text -> text != null && !text.isEmpty())
-                .collect(Collectors.toList());
-    }
-
-    public String getConfidenceValue() {
-        if (isDisplayed(confidenceValue)) {
-            return getText(confidenceValue);
+        if (pageSource.toLowerCase().contains(expectedDisease.toLowerCase())) {
+            logger.info("Found {} in page source", expectedDisease);
+            return true;
         }
-        return null;
+
+        logger.warn("Disease {} NOT found in results", expectedDisease);
+        return false;
     }
 
-    public HomePage clickNewScan() {
-        logger.info("Clicking new scan button");
-        click(newScanButton);
-        return new HomePage(driver);
+    /**
+     * Gets the first/primary disease result.
+     */
+    public String getPrimaryDisease() {
+        List<String> diseases = getAllDetectedDiseases();
+        return diseases.isEmpty() ? null : diseases.get(0);
     }
 
-    public HomePage clickBack() {
-        logger.info("Clicking back button");
-        if (isDisplayed(backButton)) {
-            click(backButton);
-        } else {
+    /**
+     * Detects if the results screen is showing an image quality error instead of diseases.
+     */
+    public boolean hasQualityError() {
+        String pageSource = driver.getPageSource().toLowerCase();
+        return pageSource.contains("quality error")
+                || pageSource.contains("image too dark")
+                || pageSource.contains("image to dark")
+                || pageSource.contains("too blurry")
+                || pageSource.contains("unable to detect");
+    }
+
+    /**
+     * Clicks the DONE button to finish viewing results.
+     */
+    public void clickDone() {
+        logger.info("Clicking DONE button");
+        try {
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+            WebElement doneButton = wait.until(ExpectedConditions.elementToBeClickable(
+                AppiumBy.id("com.visualdx.aysa:id/action_done")
+            ));
+            doneButton.click();
+            sleep(1000);
+        } catch (Exception e) {
+            logger.warn("DONE button not found, trying back navigation");
             driver.navigate().back();
         }
-        return new HomePage(driver);
     }
 
-    private String searchPageForDiseaseName() {
-        logger.debug("Searching page for disease name");
-
+    private void sleep(long millis) {
         try {
-            // Find all TextView elements and search for likely disease names
-            List<WebElement> textViews = driver.findElements(
-                    AppiumBy.className("android.widget.TextView")
-            );
-
-            for (WebElement tv : textViews) {
-                String text = tv.getText();
-                // Skip obvious non-disease text
-                if (text != null && text.length() > 3 &&
-                        !text.matches(".*[0-9]{2,}.*") && // Skip texts with numbers
-                        !text.toLowerCase().contains("upload") &&
-                        !text.toLowerCase().contains("scan") &&
-                        !text.toLowerCase().contains("button")) {
-                    return text;
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Error searching page: {}", e.getMessage());
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
-
-        return null;
     }
 }

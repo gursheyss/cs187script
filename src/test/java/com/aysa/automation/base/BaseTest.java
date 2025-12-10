@@ -54,19 +54,39 @@ public abstract class BaseTest {
     }
 
     private void initializeDriver() {
-        try {
-            CapabilitiesManager capManager = new CapabilitiesManager();
-            URL appiumServerUrl = new URL(config.getAppiumServerUrl());
+        int maxRetries = 3;
+        Exception lastException = null;
 
-            driver = new AndroidDriver(appiumServerUrl, capManager.getAndroidCapabilities());
+        for (int attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                CapabilitiesManager capManager = new CapabilitiesManager();
+                URL appiumServerUrl = new URL(config.getAppiumServerUrl());
 
-            wait = new WebDriverWait(driver, Duration.ofSeconds(config.getExplicitWait()));
+                driver = new AndroidDriver(appiumServerUrl, capManager.getAndroidCapabilities());
 
-            logger.info("Android driver initialized successfully");
-        } catch (MalformedURLException e) {
-            logger.error("Invalid Appium server URL: {}", e.getMessage());
-            throw new RuntimeException("Failed to initialize driver", e);
+                wait = new WebDriverWait(driver, Duration.ofSeconds(config.getExplicitWait()));
+
+                logger.info("Android driver initialized successfully");
+                return; // Success - exit the retry loop
+            } catch (MalformedURLException e) {
+                logger.error("Invalid Appium server URL: {}", e.getMessage());
+                throw new RuntimeException("Failed to initialize driver", e);
+            } catch (Exception e) {
+                lastException = e;
+                logger.warn("Driver init attempt {}/{} failed: {}", attempt, maxRetries, e.getMessage());
+                if (attempt < maxRetries) {
+                    try {
+                        Thread.sleep(2000); // Wait 2 seconds before retry
+                    } catch (InterruptedException ie) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
+            }
         }
+
+        // All retries failed
+        logger.error("Failed to initialize driver after {} attempts", maxRetries);
+        throw new RuntimeException("Failed to initialize driver after retries", lastException);
     }
 
     private void configureTimeouts() {
